@@ -74,12 +74,10 @@ export default function Inquiry() {
         if (response.ok) {
           const data = await response.json();
           applications = Array.isArray(data) ? data : (data?.applications || []);
-          console.log("[Inquiry] ✅ Found applications:", applications.length);
         } else if (response.status !== 404) {
           throw new Error('فشل البحث عن الطلبات');
         }
       } catch (apiError: any) {
-        console.error("[Inquiry] ⚠️ Error searching for applications:", apiError);
         // Continue even if there's an error
       }
 
@@ -90,12 +88,8 @@ export default function Inquiry() {
           
           if (externalApplications && Array.isArray(externalApplications) && externalApplications.length > 0) {
             applications = externalApplications;
-            console.log("[Inquiry] Found application in external API:", externalApplications.length);
-          } else {
-            console.log("[Inquiry] No applications found in external API");
           }
         } catch (externalError: any) {
-          console.error("[Inquiry] Error searching in external API:", externalError);
           
           // If it's a "not found" error, show friendly message
           if (externalError?.message?.includes('لم يتم العثور')) {

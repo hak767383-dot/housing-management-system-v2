@@ -290,7 +290,6 @@ export default function NewStudentApplicationForm() {
     try {
       setGeneralError(null);
       setIsSubmitting(true);
-      console.log("[Form] Submitting new student application to external API");
       
       // Get Arabic label for governorate from the list
       const governorateItem = governoratesList.find(item => item.value === data.governorate);

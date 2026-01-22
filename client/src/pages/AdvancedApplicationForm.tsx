@@ -225,7 +225,8 @@ const AdvancedApplicationForm: React.FC = () => {
 
     try {
       // Send to server (validation happens on server)
-      const response = await fetch('/api/applications/submit', {
+      const { API_BASE_URL } = await import('@/const');
+      const response = await fetch(`${API_BASE_URL}/applications/submit`, {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
