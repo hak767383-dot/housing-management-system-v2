@@ -38,16 +38,5 @@ export default defineConfig({
       strict: true,
       deny: ["**/.*"],
     },
-    proxy: {
-      "/api": {
-        target: "http://housingms.runasp.net",
-        changeOrigin: true,
-        rewrite: (path) => path.replace(/^\/api/, "/api"),
-      },
-      "/login": {
-        target: "http://housingms.runasp.net",
-        changeOrigin: true,
-      },
-    },
   },
 });
