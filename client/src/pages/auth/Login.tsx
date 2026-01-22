@@ -57,13 +57,13 @@ export default function Login() {
 
       if (!response.ok) {
         const errorData = await response.json().catch(() => ({ message: 'فشل تسجيل الدخول' }));
-        setGeneralError(errorData.message || 'فشل تسجيل الدخول');
+        // Display server error message or fallback message
+        const errorMessage = errorData.message || errorData.error || 'فشل تسجيل الدخول';
+        setGeneralError(errorMessage);
         return;
       }
 
-      const responseData = await response.json();
-      
-      // Navigate to home on success
+      // Navigate to home on successful login
       navigate('/');
     } catch (error) {
       setGeneralError(error instanceof Error ? error.message : 'حدث خطأ غير متوقع');

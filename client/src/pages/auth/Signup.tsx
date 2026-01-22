@@ -60,7 +60,8 @@ export default function Signup() {
       setGeneralError(null);
       setIsLoading(true);
       
-      // Send unified profile data to Backend
+      // Send registration data to Backend
+      // Maps form fields to backend RegisterDto schema
       const response = await fetch(`${API_BASE_URL}/student/auth/register`, {
         method: 'POST',
         headers: {
@@ -72,17 +73,18 @@ export default function Signup() {
           password: data.password,
           role: "student",
           studentId: parseInt(data.studentId) || undefined,
-          email: data.email,
         }),
       });
 
       if (!response.ok) {
         const errorData = await response.json().catch(() => ({ message: 'فشل التسجيل' }));
-        setGeneralError(errorData.message || 'فشل التسجيل');
+        // Display server error message or fallback message
+        const errorMessage = errorData.message || errorData.error || 'فشل التسجيل';
+        setGeneralError(errorMessage);
         return;
       }
 
-      // Navigate to login on success
+      // Navigate to login on successful registration
       navigate('/login');
     } catch (error) {
       setGeneralError(error instanceof Error ? error.message : 'حدث خطأ غير متوقع');

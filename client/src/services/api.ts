@@ -149,19 +149,21 @@ export const studentProfileAPI = {
     }
   },
 
-  /**
-   * Mark notification as read
-   */
+/**
+ * Mark notification as read
+ * @param notificationId - Notification ID to mark as read
+ * @returns Updated notification object or empty object
+ */
   markNotificationAsRead: async (notificationId: string) => {
     try {
       const response = await apiClient.put(
         `/api/student/profile/notifications/${notificationId}/read`,
         {}
       );
-      return response.data || {};
+      return extractObject(response.data);
     } catch (error) {
       console.error('Error marking notification as read:', error);
-      return {};
+      throw error; // Propagate error for handling in component
     }
   },
 
@@ -274,6 +276,7 @@ export const studentPaymentsAPI = {
 export const studentComplaintsAPI = {
   /**
    * Get all student complaints
+   * @returns Array of complaint objects
    */
   getComplaints: async () => {
     try {
@@ -287,17 +290,25 @@ export const studentComplaintsAPI = {
 
   /**
    * Submit a new complaint
+   * @param title - Complaint title (max 100 characters)
+   * @param message - Complaint description (max 500 characters)
+   * @returns Submitted complaint object
+   * @throws Error if submission fails
    */
-  submitComplaint: async (title: string, description: string) => {
+  submitComplaint: async (title: string, message: string) => {
     try {
       const response = await apiClient.post('/api/student/complaints/submit', {
         title,
-        description,
+        message,
       });
-      return response.data || {};
-    } catch (error) {
-      console.error('Error submitting complaint:', error);
-      throw error;
+      return extractObject(response.data);
+    } catch (error: any) {
+      const errorMessage = error?.response?.data?.message 
+        || error?.response?.data?.error 
+        || error.message 
+        || 'فشل تقديم الشكوى';
+      console.error('Error submitting complaint:', errorMessage);
+      throw new Error(errorMessage);
     }
   },
 };
@@ -373,7 +384,6 @@ export const applicationAPI = {
 
       // Primary endpoint from Swagger API documentation
       const endpoint = `/api/Application/SearchByNationalId/${cleanedNationalId}`;
-      console.log(`[API] Calling ${endpoint}`);
       
       const response = await apiClient.get(endpoint);
       
