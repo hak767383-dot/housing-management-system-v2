@@ -56,9 +56,22 @@ export default function Login() {
       });
 
       if (!response.ok) {
-        const errorData = await response.json().catch(() => ({ message: 'فشل تسجيل الدخول' }));
-        // Display server error message or fallback message
-        const errorMessage = errorData.message || errorData.error || 'فشل تسجيل الدخول';
+        let errorMessage = 'فشل تسجيل الدخول';
+        
+        try {
+          const errorData = await response.json();
+          errorMessage = errorData.message || errorData.error || errorMessage;
+        } catch (e) {
+          // If response is not JSON, use status-based message
+          if (response.status === 401) {
+            errorMessage = 'بيانات المستخدم أو كلمة المرور غير صحيحة';
+          } else if (response.status === 404) {
+            errorMessage = 'هذا الحساب غير موجود';
+          } else if (response.status >= 500) {
+            errorMessage = 'خطأ في الخادم. حاول لاحقاً';
+          }
+        }
+        
         setGeneralError(errorMessage);
         return;
       }
@@ -66,7 +79,18 @@ export default function Login() {
       // Navigate to home on successful login
       navigate('/');
     } catch (error) {
-      setGeneralError(error instanceof Error ? error.message : 'حدث خطأ غير متوقع');
+      // Handle network errors
+      if (error instanceof Error) {
+        if (error.message.includes('Failed to fetch') || error.message.includes('ERR_CONNECTION_RESET')) {
+          setGeneralError('خطأ في الاتصال. تأكد من أن الخادم متصل بالإنترنت');
+        } else if (error.message.includes('CORS')) {
+          setGeneralError('خطأ في الاتصال بسبب سياسة الأمان. يرجى التواصل مع الدعم الفني');
+        } else {
+          setGeneralError(error.message);
+        }
+      } else {
+        setGeneralError('حدث خطأ غير متوقع. حاول مرة أخرى');
+      }
     } finally {
       setIsLoading(false);
     }
@@ -88,6 +112,13 @@ export default function Login() {
           />
         </div>
       )}
+
+      {/* Demo Mode Info */}
+      <div className="mb-6 p-4 bg-blue-50 border border-blue-200 rounded-lg">
+        <p className="text-sm text-blue-900">
+          <span className="font-semibold">📌 نمط العرض التوضيحي:</span> استخدم بيانات الحساب المسجلة مسبقاً
+        </p>
+      </div>
 
       {/* Login Form */}
       <form onSubmit={handleSubmit(onSubmit)} className="space-y-2">
