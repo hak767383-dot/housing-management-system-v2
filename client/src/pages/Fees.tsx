@@ -3,6 +3,7 @@ import MainLayout from '@/components/MainLayout';
 import LoadingSpinner from '@/components/LoadingSpinner';
 import AlertBox from '@/components/AlertBox';
 import FormInput from '@/components/FormInput';
+import { useAuthContext } from '@/contexts/AuthContext';
 import {
   Dialog,
   DialogContent,
@@ -29,6 +30,7 @@ interface Fee {
  * Displays student housing fees and payment status
  */
 export default function Fees() {
+  const { user } = useAuthContext();
   const [fees, setFees] = useState<Fee[]>([]);
   const [isLoading, setIsLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
@@ -86,8 +88,9 @@ export default function Fees() {
       // Note: submitPayment method not available - use makePayment instead
       await studentPaymentsAPI.makePayment({
         feeId: selectedFee.id,
-        amount: selectedFee.amount,
-        paymentMethod: 'transaction',
+        studentId: user?.id || '',
+        transactionCode: transactionCode,
+        receiptFilePath: receiptPath,
       });
 
       setPaymentSuccess(true);

@@ -1,4 +1,4 @@
-import { createTRPCReact } from "@trpc/react-query";
-import type { AppRouter } from "@shared/types";
+// TRPC is not used in client-only mode
+// This file is deprecated
 
-export const trpc = createTRPCReact<AppRouter>();
+export const trpc = null;

@@ -97,7 +97,7 @@ export default function MyApplications() {
         {error && (
           <div className="bg-red-50 border-r-4 border-red-500 rounded-lg p-6">
             <h3 className="text-lg font-bold text-red-700 mb-2">حدث خطأ</h3>
-            <p className="text-red-600">{error.message}</p>
+            <p className="text-red-600">{error}</p>
           </div>
         )}
 

@@ -115,3 +115,4 @@ temp/
 *.sqlite3
 
 
+.vercel

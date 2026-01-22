@@ -87,9 +87,7 @@ export const useToast = () => {
         error: string;
       }
     ) => {
-      return toast.promise(promise, messages, {
-        position: 'top-right',
-      });
+      return toast.promise(promise, messages);
     },
 
     /**

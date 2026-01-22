@@ -83,23 +83,9 @@ export default function Inquiry() {
         // Continue even if there's an error
       }
 
-      // Check if we found anything
+      // Try external API if no results found locally
       if (applications.length === 0) {
-        setError('لم يتم العثور على أي طلبات بهذا الرقم القومي');
-        return;
-      }
-
-      // Display the results
-      if (applications.length === 1) {
-        setResult(applications[0]);
-      } else {
-        // Multiple applications found
-        setResult({
-          multiple: true,
-          applications: applications,
-        });
-      }
-    } catch (err) {
+        try {
           const externalApplications = await applicationAPI.searchByNationalId(cleanedValue);
           
           if (externalApplications && Array.isArray(externalApplications) && externalApplications.length > 0) {
@@ -119,15 +105,11 @@ export default function Inquiry() {
             if (externalError?.message?.includes('ECONNREFUSED') || externalError?.message?.includes('فشل الاتصال')) {
               throw new Error('فشل الاتصال بالخادم، يرجى المحاولة لاحقاً');
             }
-            // For other errors, only throw if we didn't find anything locally
-            if (!foundInLocal && applications.length === 0) {
-              throw externalError;
-            }
           }
         }
       }
 
-      // Step 3: Process results
+      // Process results
       if (!applications || applications.length === 0) {
         setError('عذرًا، لم يتم العثور على طلب بهذا الرقم القومي');
         setResult(null);

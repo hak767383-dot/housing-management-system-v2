@@ -106,14 +106,6 @@ export default function Complaints() {
     }
   };
 
-  if (complaintsQuery.isLoading) {
-    return (
-      <MainLayout>
-        <LoadingSpinner message="جاري تحميل الشكاوى..." />
-      </MainLayout>
-    );
-  }
-
   return (
     <MainLayout>
       <div className="space-y-8">

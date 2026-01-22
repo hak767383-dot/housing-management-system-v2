@@ -7,7 +7,7 @@ import { ValidationResult, FIELD_VALIDATORS } from '@shared/validation';
 interface ValidatedInputProps {
   label: string;
   name: string;
-  value: string;
+  value?: string;
   onChange: (value: string) => void;
   onBlur?: (value: string) => void;
   placeholder?: string;
@@ -92,11 +92,9 @@ export const ValidatedInput: React.FC<ValidatedInputProps> = ({
     } else if (validationType === 'nationalId') {
       result = FIELD_VALIDATORS.nationalId.validate(fieldValue);
     } else if (validationType === 'arabicText') {
-      result = FIELD_VALIDATORS.arabicText.validate(fieldValue, label);
-    } else if (validationType === 'email') {
-      result = FIELD_VALIDATORS.email.validate(fieldValue);
+      result = FIELD_VALIDATORS.arabicText.validate(fieldValue);
     } else {
-      result = { isValid: true };
+      result = { isValid: true, message: '' };
     }
 
     setValidationError(result.message || '');

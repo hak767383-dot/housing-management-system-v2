@@ -30,7 +30,10 @@ export const AuthProvider: React.FC<AuthProviderProps> = ({ children }) => {
       loading: authState.loading,
       error: authState.error,
       logout: authState.logout,
-      refresh: authState.refresh,
+      refresh: async () => {
+        // Refresh is not implemented in client-only mode
+        // Re-fetch user data if needed by calling logout/re-login
+      },
     }),
     [authState]
   );

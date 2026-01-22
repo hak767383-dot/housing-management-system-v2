@@ -323,8 +323,6 @@ export default function NewStudentApplicationForm() {
       });
 
       // Application submitted successfully
-      setSuccess(true);
-
       setSuccessMessage('تم تقديم طلبك بنجاح!');
       reset();
       setTimeout(() => {

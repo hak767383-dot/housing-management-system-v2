@@ -36,7 +36,7 @@ export function useValidation(
   });
 
   const [isValidating, setIsValidating] = useState(false);
-  const validationTimeoutRef = useRef<NodeJS.Timeout>();
+  const validationTimeoutRef = useRef<NodeJS.Timeout | undefined>(undefined);
 
   /**
    * Validate value against rules
@@ -336,7 +336,7 @@ export function useDebouncedValidation(
 ) {
   const [isValidating, setIsValidating] = useState(false);
   const [result, setResult] = useState<boolean | null>(null);
-  const timeoutRef = useRef<NodeJS.Timeout>();
+  const timeoutRef = useRef<NodeJS.Timeout | undefined>(undefined);
 
   useEffect(() => {
     // Clear previous timeout

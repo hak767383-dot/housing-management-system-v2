@@ -42,18 +42,18 @@ export const PaymentReceiptUpload: React.FC<{
         uploadPromise,
         {
           loading: "جاري رفع الملف...",
-          success: (data) => {
-            onUploadSuccess?.(data.filename, data.storageRef);
-            setSelectedFile(null);
-            return "تم رفع الملف بنجاح";
-          },
-          error: (error) => {
-            return error instanceof Error
-              ? error.message
-              : "فشل رفع الملف";
-          },
+          success: "تم رفع الملف بنجاح",
+          error: "فشل رفع الملف",
         }
       );
+      
+      try {
+        const data = await uploadPromise;
+        onUploadSuccess?.(data.filename, data.storageRef);
+        setSelectedFile(null);
+      } catch (error) {
+        console.error("Upload error:", error);
+      }
     } catch (error) {
       toast.error(
         error instanceof Error ? error.message : "فشل رفع الملف، حاول مرة أخرى"

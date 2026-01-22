@@ -1,4 +1,4 @@
-import { UseQueryOptions, UseQuery } from '@tanstack/react-query';
+import { useQuery } from '@tanstack/react-query';
 
 /**
  * State Management Patterns & Performance Improvements

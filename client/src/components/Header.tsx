@@ -83,7 +83,7 @@ export default function Header({ onMenuClick, isSidebarOpen }: HeaderProps) {
               
               <button
                 onClick={handleLogout}
-                disabled={logoutMutation.isPending}
+                disabled={isLoggingOut}
                 className="p-2 hover:bg-red-50 rounded-lg transition-colors text-[#E01C46] disabled:opacity-50"
                 aria-label="Logout"
               >
