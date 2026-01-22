@@ -6,27 +6,18 @@ import { useLocation } from 'wouter';
 import { User, Lock, IdCard } from 'lucide-react';
 import AuthLayout from '@/components/AuthLayout';
 import FormInput from '@/components/FormInput';
-import ValidatedInput from '@/components/ValidatedInput';
 import AlertBox from '@/components/AlertBox';
 import { Button } from '@/components/ui/button';
-import { validatePhone, validateNId } from '@shared/validation';
 import { API_BASE_URL } from '@/const';
 
-// Validation schema - Unified field names
+// Validation schema - Only required fields for registration
 const signupSchema = z.object({
-  username: z.string().min(3, 'اسم المستخدم يجب أن يكون 3 أحرف على الأقل'),
+  username: z.string()
+    .min(3, 'اسم المستخدم يجب أن يكون 3 أحرف على الأقل')
+    .max(50, 'اسم المستخدم لا يمكن أن يتجاوز 50 حرف'),
   studentId: z.string().min(1, 'الرقم الجامعي مطلوب'),
   password: z.string().min(6, 'كلمة المرور يجب أن تكون 6 أحرف على الأقل'),
   confirmPassword: z.string().min(1, 'تأكيد كلمة المرور مطلوب'),
-  // Unified Profile Data (stored in Backend)
-  fullName: z.string().min(3, 'الاسم الكامل مطلوب'),
-  nationalId: z.string()
-    .min(1, 'الرقم القومي مطلوب')
-    .regex(/^[0-9]{14}$/, 'الرقم القومي يجب أن يكون 14 رقم بالضبط'),
-  phoneNumber: z.string()
-    .min(1, 'رقم الهاتف مطلوب')
-    .regex(/^01[0-9]{9}$/, 'رقم الهاتف يجب أن يكون 11 رقم يبدأ بـ 01'),
-  email: z.string().email('البريد الإلكتروني غير صحيح'),
 }).refine((data) => data.password === data.confirmPassword, {
   message: 'كلمات المرور غير متطابقة',
   path: ['confirmPassword'],
@@ -42,14 +33,11 @@ type SignupFormData = z.infer<typeof signupSchema>;
 export default function Signup() {
   const [, navigate] = useLocation();
   const [generalError, setGeneralError] = useState<string | null>(null);
-  const [nationalIdError, setNationalIdError] = useState<string>('');
-  const [phoneError, setPhoneError] = useState<string>('');
   const [isLoading, setIsLoading] = useState(false);
 
   const {
     register,
     handleSubmit,
-    setValue,
     formState: { errors },
   } = useForm<SignupFormData>({
     resolver: zodResolver(signupSchema),
@@ -111,7 +99,7 @@ export default function Signup() {
       )}
 
       {/* Signup Form */}
-      <form onSubmit={handleSubmit(onSubmit)} className="space-y-2 max-h-[70vh] overflow-y-auto">
+      <form onSubmit={handleSubmit(onSubmit)} className="space-y-2">
         {/* Username Field */}
         <FormInput
           label="اسم المستخدم"
@@ -131,65 +119,6 @@ export default function Signup() {
           error={errors.studentId?.message}
           required
           {...register('studentId')}
-        />
-
-        {/* Full Name Field - Unified Profile Data */}
-        <FormInput
-          label="الاسم الكامل"
-          placeholder="أدخل اسمك الكامل"
-          icon={<User size={20} />}
-          error={errors.fullName?.message}
-          required
-          {...register('fullName')}
-        />
-
-        {/* National ID Field - Unified Profile Data */}
-        <ValidatedInput
-          label="الرقم القومي"
-          name="nationalId"
-          placeholder="14 رقم - مثال: 30303030303030"
-          validationType="nationalId"
-          maxLength={14}
-          error={nationalIdError || errors.nationalId?.message}
-          onBlur={() => {
-            const value = register('nationalId').name;
-            // Will be validated by react-hook-form
-          }}
-          onChange={(value) => {
-            setValue('nationalId', value);
-            const validation = validateNId(value);
-            setNationalIdError(validation.isValid ? '' : validation.message);
-          }}
-          required
-        />
-
-        {/* Phone Number Field - Unified Profile Data */}
-        <ValidatedInput
-          label="رقم الهاتف"
-          name="phoneNumber"
-          placeholder="11 رقم - مثال: 01000000000"
-          validationType="phone"
-          maxLength={11}
-          error={phoneError || errors.phoneNumber?.message}
-          onBlur={() => {
-            // Will be validated by react-hook-form
-          }}
-          onChange={(value) => {
-            setValue('phoneNumber', value);
-            const validation = validatePhone(value);
-            setPhoneError(validation.isValid ? '' : validation.message);
-          }}
-          required
-        />
-
-        {/* Email Field - Unified Profile Data */}
-        <FormInput
-          label="البريد الإلكتروني"
-          type="email"
-          placeholder="أدخل البريد الإلكتروني"
-          error={errors.email?.message}
-          required
-          {...register('email')}
         />
 
         {/* Password Field */}
