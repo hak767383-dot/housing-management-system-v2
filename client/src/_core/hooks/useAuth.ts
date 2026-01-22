@@ -20,7 +20,7 @@ export function useAuth(options?: UseAuthOptions) {
     const fetchUser = async () => {
       try {
         setIsLoading(true);
-        const response = await fetch(`${API_BASE_URL}/auth/me`, {
+        const response = await fetch(`${API_BASE_URL}/student/auth/me`, {
           credentials: 'include',
         });
 
@@ -48,7 +48,7 @@ export function useAuth(options?: UseAuthOptions) {
 
   const logout = useCallback(async () => {
     try {
-      await fetch(`${API_BASE_URL}/auth/logout`, {
+      await fetch(`${API_BASE_URL}/student/auth/logout`, {
         method: 'POST',
         credentials: 'include',
       }).catch(() => {

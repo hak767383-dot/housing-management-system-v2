@@ -61,7 +61,7 @@ export default function Signup() {
       setIsLoading(true);
       
       // Send unified profile data to Backend
-      const response = await fetch(`${API_BASE_URL}/auth/register`, {
+      const response = await fetch(`${API_BASE_URL}/student/auth/register`, {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',

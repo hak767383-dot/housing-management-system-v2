@@ -27,7 +27,7 @@ export default function Header({ onMenuClick, isSidebarOpen }: HeaderProps) {
       setIsLoggingOut(true);
       
       // Call logout API
-      await fetch(`${API_BASE_URL}/auth/logout`, {
+      await fetch(`${API_BASE_URL}/student/auth/logout`, {
         method: 'POST',
         credentials: 'include',
       }).catch(() => {

@@ -43,7 +43,7 @@ export default function Login() {
       setGeneralError(null);
       setIsLoading(true);
       
-      const response = await fetch(`${API_BASE_URL}/auth/login`, {
+      const response = await fetch(`${API_BASE_URL}/student/auth/login`, {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
